@@ -6,10 +6,12 @@ import langid
 
 app = Flask(__name__)
 
+
 def detect_language(image_path):
     text = pytesseract.image_to_string(Image.open(image_path), lang='eng+ara')
     lang, _ = langid.classify(text)
     return lang
+
 
 def ocr(image_path, language):
     if language == 'en':
