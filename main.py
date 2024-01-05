@@ -20,26 +20,28 @@ def ocr(image_data, language):
     return result
 
 
-@app.route('/perform_ocr', methods=['POST'])
 def perform_ocr():
     language = request.form.get('language')
 
     if 'image' not in request.files:
-        return 'No image provided in the request'
+        return jsonify({'error': 'No image provided in the request'})
 
     image = request.files['image']
 
     # Ensure the uploaded file is an image
     allowed_extensions = {'png', 'jpg', 'jpeg', 'gif'}
     if '.' not in image.filename or image.filename.split('.')[-1].lower() not in allowed_extensions:
-        return 'Invalid image file'
+        return jsonify({'error': 'Invalid image file'})
 
     # Read the image data
     image_data = image.read()
 
-    result = ocr(image_data, language)
-    return jsonify({'result': result})
+    try:
+        result = ocr(image_data, language)
+        return jsonify({'result': result})
+    except Exception as e:
+        return jsonify({'error': f'An error occurred: {str(e)}'})
 
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5001)
+    app.run(debug=True)

@@ -1,8 +1,8 @@
 import requests
 
-api_url = 'http://127.0.0.1:5001/perform_ocr'
+api_url = 'https://pyocr-b3169decc152.herokuapp.com//perform_ocr'
 image_path = 'test/imgs/4.png'
-language = 'l'
+language = 'm'
 data = {'language': language}
 
 with open(image_path, 'rb') as file:
