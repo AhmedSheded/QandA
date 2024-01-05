@@ -1,4 +1,6 @@
 libgl1-mesa-glx
-tesseract-ocr
 libtesseract-dev
 libarchive13
+tesseract-ocr
+tesseract-ocr-eng
+tesseract-ocr-ara
