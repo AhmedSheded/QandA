@@ -1,44 +1,45 @@
 from flask import Flask, request, jsonify
 from PIL import Image
-from pix2text import Pix2Text, merge_line_texts
+from rapid_latex_ocr import LatexOCR
 import pytesseract
-import langid
+import io
 
 app = Flask(__name__)
+model = LatexOCR()
 
 
-def detect_language(image_path):
-    text = pytesseract.image_to_string(Image.open(image_path), lang='eng+ara')
-    lang, _ = langid.classify(text)
-    return lang
-
-
-def ocr(image_path, language):
-    if language == 'en':
-        p2t = Pix2Text(analyzer_config=dict(model_name='mfd'))
-        outs = p2t(image_path, resized_shape=608)  # Equal to p2t.recognize()
-        result = merge_line_texts(outs, auto_line_break=True)
-    elif language == 'ar':
-        # pytesseract.pytesseract.tesseract_cmd = '/usr/bin/tesseract'
-        pytesseract.pytesseract.tesseract_cmd = '/app/.apt/usr/bin/tesseract'
-        img = Image.open(image_path)
-        result = pytesseract.image_to_string(img, lang='ara+equ')
+def ocr(image_data, language):
+    if language == 'm':
+        res, elapse = model(image_data)
+        result = res
+    elif language == 'l':
+        img = Image.open(io.BytesIO(image_data))
+        result = pytesseract.image_to_string(img, lang='ara+eng')
+    else:
+        return 'bad request'
     return result
 
-@app.route('/process_image', methods=['POST'])
-def process_image():
+
+@app.route('/perform_ocr', methods=['POST'])
+def perform_ocr():
+    language = request.form.get('language')
+
     if 'image' not in request.files:
-        return jsonify({'error': 'No image provided'}), 400
+        return 'No image provided in the request'
 
-    image_file = request.files['image']
+    image = request.files['image']
 
-    if image_file.filename == '':
-        return jsonify({'error': 'No selected image file'}), 400
+    # Ensure the uploaded file is an image
+    allowed_extensions = {'png', 'jpg', 'jpeg', 'gif'}
+    if '.' not in image.filename or image.filename.split('.')[-1].lower() not in allowed_extensions:
+        return 'Invalid image file'
 
-    language = detect_language(image_file)
-    text = ocr(image_file, language)
-    return jsonify({'text': text})
+    # Read the image data
+    image_data = image.read()
+
+    result = ocr(image_data, language)
+    return jsonify({'result': result})
 
 
 if __name__ == '__main__':
-    app.run(port=5000, debug=False)
+    app.run(debug=True, port=5001)
