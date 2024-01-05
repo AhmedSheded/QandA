@@ -4,7 +4,7 @@ import requests
 image_path = 'test/imgs/4.png'
 
 # Replace with the desired language ('m' or 'l')
-language = 'm'
+language = 'l'
 
 # API endpoint URL
 # url = 'http://127.0.0.1:5001/ocr'
@@ -19,3 +19,4 @@ response = requests.post(url, files=files, data=data, timeout=30)
 
 # Print the response
 print(response.json())
+print(response.status_code)
