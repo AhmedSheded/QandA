@@ -4,6 +4,8 @@ from rapid_latex_ocr import LatexOCR
 import pytesseract
 import io
 import os
+import matplotlib
+matplotlib.use('agg')
 
 app = Flask(__name__)
 
