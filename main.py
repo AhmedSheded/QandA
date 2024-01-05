@@ -12,8 +12,7 @@ app = Flask(__name__)
 model = LatexOCR()
 
 # Set Tesseract command
-pytesseract.tesseract_cmd = os.environ.get('TESSDATA_PREFIX', '') + '/bin/tesseract'
-
+pytesseract.pytesseract.tesseract_cmd = os.environ.get('TESSDATA_PREFIX', '') + '/bin/tesseract'
 
 def ocr(image_data, language):
     if language == 'm':
