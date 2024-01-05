@@ -3,11 +3,13 @@ from PIL import Image
 from rapid_latex_ocr import LatexOCR
 import pytesseract
 import io
+import os
 
 app = Flask(__name__)
 
 model = LatexOCR()
 
+pytesseract.tesseract_cmd = os.environ.get('TESSDATA_PREFIX', '') + '/bin/tesseract'
 
 def ocr(image_data, language):
     if language == 'm':
@@ -41,4 +43,4 @@ def ocr_endpoint():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port= 5001)
