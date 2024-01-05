@@ -5,6 +5,7 @@ import pytesseract
 import io
 
 app = Flask(__name__)
+
 model = LatexOCR()
 
 
@@ -20,27 +21,23 @@ def ocr(image_data, language):
     return result
 
 
-def perform_ocr():
-    language = request.form.get('language')
-
-    if 'image' not in request.files:
-        return jsonify({'error': 'No image provided in the request'})
-
-    image = request.files['image']
-
-    # Ensure the uploaded file is an image
-    allowed_extensions = {'png', 'jpg', 'jpeg', 'gif'}
-    if '.' not in image.filename or image.filename.split('.')[-1].lower() not in allowed_extensions:
-        return jsonify({'error': 'Invalid image file'})
-
-    # Read the image data
-    image_data = image.read()
-
+@app.route('/ocr', methods=['POST'])
+def ocr_endpoint():
     try:
+        # Get the language and image data from the request
+        language = request.form.get('language')
+        image_file = request.files['image']
+
+        # Read the image data
+        image_data = image_file.read()
+
+        # Call the ocr function
         result = ocr(image_data, language)
-        return jsonify({'result': result})
+
+        # Return the OCR result as JSON
+        return jsonify({'result': result, 'status': 'success'})
     except Exception as e:
-        return jsonify({'error': f'An error occurred: {str(e)}'})
+        return jsonify({'status': 'error', 'message': str(e)})
 
 
 if __name__ == '__main__':
