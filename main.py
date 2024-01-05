@@ -36,19 +36,19 @@ def ocr_endpoint():
         image_data = image_file.read()
 
         # Call the ocr function
-        result = ocr(image_data, language)
+        result = ''
+        result += ocr(image_data, language)
 
         # Return the OCR result as JSON
         return jsonify({'result': result, 'status': 'success'})
     except FileNotFoundError as e:
         return jsonify({'status': 'error', 'message': f'File not found: {str(e)}'})
+    except TimeoutError:
+        return jsonify({'status': 'error', 'message': 'Request timed out'})
     except Exception as e:
         return jsonify({'status': 'error', 'message': str(e)})
 
 
-# Use PORT environment variable provided by Heroku
-port = int(os.environ.get('PORT', 5000))
-
-
+port = int(os.environ.get('PORT', 5001))
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=port)
