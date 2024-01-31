@@ -7,8 +7,8 @@ from texify.model.processor import load_processor
 import pytesseract
 import io
 import os
-# import matplotlib
-# matplotlib.use('agg')
+import matplotlib
+matplotlib.use('agg')
 
 app = Flask(__name__)
 
