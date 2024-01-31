@@ -2,3 +2,7 @@ venv
 *.ipynb
 test
 test.py
+*.psd
+*.pdf
+/test
+/spec
