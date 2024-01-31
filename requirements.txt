@@ -1,6 +1,6 @@
 Flask==3.0.0
 Pillow==10.1.0
 pytesseract==0.3.10
-rapid-latex-ocr==0.0.6
+texify==0.1.8
 gunicorn==20.1.0
 tesseract==0.1.3

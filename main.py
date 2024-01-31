@@ -1,6 +1,9 @@
 from flask import Flask, request, jsonify
 from PIL import Image
-from rapid_latex_ocr import LatexOCR
+# from rapid_latex_ocr import LatexOCR
+from texify.inference import batch_inference
+from texify.model.model import load_model
+from texify.model.processor import load_processor
 import pytesseract
 import io
 import os
@@ -9,16 +12,19 @@ import os
 
 app = Flask(__name__)
 
-model = LatexOCR()
+# model = LatexOCR()
 
 # Set Tesseract command
 pytesseract.tesseract_cmd = '/app/.apt/usr/bin/tesseract'
-
+model = load_model()
+processor = load_processor()
 
 def ocr(image_data, language):
     if language == 'm':
-        res, elapse = model(image_data)
-        result = res
+        # res, elapse = model(image_data)
+        # result = res
+        img = Image.open(io.BytesIO(image_data))  # Your image name here
+        result = ' '.join(batch_inference([img], model, processor))
     elif language == 'l':
         img = Image.open(io.BytesIO(image_data))
         result = pytesseract.image_to_string(img, lang='ara+eng')
