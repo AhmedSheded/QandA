@@ -5,8 +5,8 @@ image_path = 'test/imgs/4.png'
 language = 'm'
 
 # API endpoint URL
-url = 'http://127.0.0.1:5000/ocr'
-# url = 'https://pyocr-b3169decc152.herokuapp.com/ocr'
+# url = 'http://127.0.0.1:5000/ocr'
+url = 'https://pyocr-b3169decc152.herokuapp.com/ocr'
 
 files = {'image': open(image_path, 'rb')}
 data = {'language': language}
