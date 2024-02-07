@@ -4,3 +4,5 @@ test
 test.py
 Aptfile
 Procfile
+archive.txt
+.slugignore
