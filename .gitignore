@@ -2,8 +2,6 @@ venv
 notebook.ipynb
 test
 test.py
-Aptfile
-Procfile
 archive.txt
 .slugignore
 *.pyc
