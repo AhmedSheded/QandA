@@ -6,3 +6,4 @@ Aptfile
 Procfile
 archive.txt
 .slugignore
+*.pyc
